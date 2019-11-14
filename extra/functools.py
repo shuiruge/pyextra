@@ -1,13 +1,17 @@
+from functools import reduce
 from typing import List, Callable
 
 
+def identity(x):
+    return x
+
+
 def compose(*fns: List[Callable]) -> Callable:
-    if len(fns) == 1:
-        return fns[0]
-    else:
-        def composed(*args, **kwargs):
-            return fns[0](compose(*fns[1:])(*args, **kwargs))
-        return composed
+
+    def compose2(f, g):
+        return lambda x: f(g(x))
+
+    return reduce(compose2, fns, identity)
 
 
 if __name__ == '__main__':
